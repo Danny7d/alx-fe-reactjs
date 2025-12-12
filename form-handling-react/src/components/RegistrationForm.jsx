@@ -1,51 +1,95 @@
 import React, { useState } from "react";
 
 function RegistrationForm() {
-  const [username, setUsername] = useState(""); // for username
-  const [email, setEmail] = useState(""); // for email
-  const [password, setPassword] = useState(""); // for password
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({}); // object to hold field errors
+  const [submittedMessage, setSubmittedMessage] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted:", { username, email, password });
-    // reset form
-    setUsername("");
-    setEmail("");
-    setPassword("");
+
+    const newErrors = {};
+
+    // Basic validation
+    if (!username.trim()) {
+      newErrors.username = "Username is required";
+    } else if (username.trim().length < 3) {
+      newErrors.username = "Username must be at least 3 characters";
+    }
+
+    if (!email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!email.includes("@")) {
+      newErrors.email = "Invalid email";
+    }
+
+    if (!password.trim()) {
+      newErrors.password = "Password is required";
+    } else if (password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
+    }
+
+    setErrors(newErrors);
+
+    // If no errors, submit form
+    if (Object.keys(newErrors).length === 0) {
+      console.log("Form submitted:", { username, email, password });
+
+      // Reset fields
+      setUsername("");
+      setEmail("");
+      setPassword("");
+
+      // Show "Submitted" message for 2 seconds
+      setSubmittedMessage(true);
+      setTimeout(() => setSubmittedMessage(false), 2000);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <h1>Registration Form</h1>
 
+      {/* USERNAME */}
       <label>Username</label>
       <input
         type="text"
-        value={username} // controlled
+        value={username}
         onChange={(e) => setUsername(e.target.value)}
         placeholder="Enter username"
       />
+      {errors.username && <p style={{ color: "red" }}>{errors.username}</p>}
       <p>Username: {username}</p>
 
+      {/* EMAIL */}
       <label>Email</label>
       <input
         type="email"
-        value={email} // controlled
+        value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Enter email"
       />
+      {errors.email && <p style={{ color: "red" }}>{errors.email}</p>}
       <p>Email: {email}</p>
 
+      {/* PASSWORD */}
       <label>Password</label>
       <input
         type="password"
-        value={password} // controlled
+        value={password}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Enter password"
       />
+      {errors.password && <p style={{ color: "red" }}>{errors.password}</p>}
       <p>Password: {password}</p>
 
       <button type="submit">Submit</button>
+
+      {submittedMessage && (
+        <p style={{ color: "green", marginTop: "10px" }}>Submitted!</p>
+      )}
     </form>
   );
 }
