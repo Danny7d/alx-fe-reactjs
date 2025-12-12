@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
@@ -13,6 +13,10 @@ const validationSchema = Yup.object({
 });
 
 function FormikForm() {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   return (
     <div>
       <h1>User Form</h1>
@@ -44,6 +48,8 @@ function FormikForm() {
               id="name"
               name="name"
               placeholder="Enter your name"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
             <ErrorMessage name="name" component="p" style={{ color: "red" }} />
             {/* Live value display */}
@@ -55,6 +61,8 @@ function FormikForm() {
               id="email"
               name="email"
               placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <ErrorMessage name="email" component="p" style={{ color: "red" }} />{" "}
             <br />
@@ -65,6 +73,8 @@ function FormikForm() {
               id="password"
               name="password"
               placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <ErrorMessage
               name="password"
