@@ -24,14 +24,18 @@ function FormikForm() {
       <Formik
         initialValues={{ name: "", email: "", password: "" }}
         validationSchema={validationSchema}
-        onSubmit={(values, { resetForm }) => {
+        onSubmit={(values, { resetForm, setErrors }) => {
           // Manual validation conditions
-          if (!values.email) {
-            console.log("Email is required");
+          if (!username) {
+            setErrors({ name: "Name is required" });
             return;
           }
-          if (!values.password) {
-            console.log("Password is required");
+          if (!email) {
+            setErrors({ email: "Email is required" });
+            return;
+          }
+          if (!password) {
+            setErrors({ password: "Password is required" });
             return;
           }
 
