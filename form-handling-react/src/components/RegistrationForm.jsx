@@ -4,7 +4,7 @@ function RegistrationForm() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({}); // object to hold field errors
+  const [errors, setErrors] = useState({});
   const [submittedMessage, setSubmittedMessage] = useState(false);
 
   const handleSubmit = (e) => {
@@ -12,37 +12,31 @@ function RegistrationForm() {
 
     const newErrors = {};
 
-    // Basic validation
-    if (!username.trim()) {
-      newErrors.username = "Username is required";
-    } else if (username.trim().length < 3) {
+    // USERNAME validation
+    if (!username.trim()) newErrors.username = "Username is required";
+    else if (username.trim().length < 3)
       newErrors.username = "Username must be at least 3 characters";
-    }
 
-    if (!email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!email.includes("@")) {
-      newErrors.email = "Invalid email";
-    }
+    // EMAIL validation
+    if (!email.trim()) newErrors.email = "Email is required";
+    else if (!email.includes("@")) newErrors.email = "Invalid email";
 
-    if (!password.trim()) {
-      newErrors.password = "Password is required";
-    } else if (password.length < 6) {
+    // PASSWORD validation
+    if (!password.trim()) newErrors.password = "Password is required";
+    else if (password.length < 6)
       newErrors.password = "Password must be at least 6 characters";
-    }
 
     setErrors(newErrors);
 
-    // If no errors, submit form
     if (Object.keys(newErrors).length === 0) {
       console.log("Form submitted:", { username, email, password });
 
-      // Reset fields
+      // Reset form
       setUsername("");
       setEmail("");
       setPassword("");
 
-      // Show "Submitted" message for 2 seconds
+      // Show "Submitted!" message for 2 seconds
       setSubmittedMessage(true);
       setTimeout(() => setSubmittedMessage(false), 2000);
     }
@@ -52,7 +46,6 @@ function RegistrationForm() {
     <form onSubmit={handleSubmit}>
       <h1>Registration Form</h1>
 
-      {/* USERNAME */}
       <label>Username</label>
       <input
         type="text"
@@ -63,7 +56,6 @@ function RegistrationForm() {
       {errors.username && <p style={{ color: "red" }}>{errors.username}</p>}
       <p>Username: {username}</p>
 
-      {/* EMAIL */}
       <label>Email</label>
       <input
         type="email"
@@ -74,7 +66,6 @@ function RegistrationForm() {
       {errors.email && <p style={{ color: "red" }}>{errors.email}</p>}
       <p>Email: {email}</p>
 
-      {/* PASSWORD */}
       <label>Password</label>
       <input
         type="password"
