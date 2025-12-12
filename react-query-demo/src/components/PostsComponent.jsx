@@ -17,14 +17,18 @@ function PostsComponent() {
     isError,
     refetch,
     isFetching,
+    isRefetching,
+    previousData,
   } = useQuery({
     queryKey: ["posts"],
     queryFn: fetchPosts,
     staleTime: 10000, // Data is fresh for 10 seconds
     cacheTime: 300000, // Data stays in cache for 5 minutes
+    refetchOnWindowFocus: true, // Automatically refetch when window gains focus
+    keepPreviousData: true, // Keep previous data while fetching new data
   });
 
-  if (isLoading) {
+  if (isLoading && !previousData) {
     return (
       <div className="loading-container">
         <div className="spinner"></div>
@@ -45,6 +49,8 @@ function PostsComponent() {
     );
   }
 
+  const displayData = previousData || posts || [];
+
   return (
     <div className="posts-container">
       <div className="posts-header">
@@ -57,12 +63,15 @@ function PostsComponent() {
           >
             {isFetching ? "Refetching..." : "Refetch Posts"}
           </button>
-          <span className="posts-count">{posts.length} posts loaded</span>
+          <span className="posts-count">
+            {displayData.length} posts loaded
+            {isRefetching && " (updating...)"}
+          </span>
         </div>
       </div>
 
       <div className="posts-grid">
-        {posts.map((post) => (
+        {displayData.map((post) => (
           <div key={post.id} className="post-card">
             <h3 className="post-title">{post.title}</h3>
             <p className="post-body">{post.body}</p>
@@ -85,6 +94,14 @@ function PostsComponent() {
             <strong>Stale Time:</strong> Data is considered fresh for 10 seconds
           </li>
           <li>
+            <strong>Refetch on Window Focus:</strong> Data automatically
+            refetches when you return to the browser tab
+          </li>
+          <li>
+            <strong>Keep Previous Data:</strong> Previous data remains visible
+            while fetching new data
+          </li>
+          <li>
             <strong>Background Refetching:</strong> Data refetches in background
             when window regains focus
           </li>
@@ -103,7 +120,9 @@ function PostsComponent() {
         </ul>
         <p className="cache-tip">
           <strong>Tip:</strong> Open browser dev tools and check the Network
-          tab. Navigate away and back to this page to see caching in action!
+          tab. Navigate away and back to this page to see refetchOnWindowFocus
+          in action! The previous data remains visible while new data is being
+          fetched.
         </p>
       </div>
     </div>
