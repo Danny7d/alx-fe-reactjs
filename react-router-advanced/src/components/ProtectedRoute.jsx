@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 
-const ProtectedRoute = ({ children }) => {
+const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -17,6 +17,12 @@ const ProtectedRoute = ({ children }) => {
     const timer = setTimeout(checkAuth, 500);
     return () => clearTimeout(timer);
   }, []);
+
+  return { isAuthenticated, isLoading };
+};
+
+const ProtectedRoute = ({ children }) => {
+  const { isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) {
     return (
